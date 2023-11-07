@@ -30,11 +30,19 @@ def is_ident_char(c: str, first: bool):
             return False
 
 
+def clearToken(token: Token):
+    token.ty = None
+    token.value = None
+    token.start_pos = 0
+    token.end_pos = 0
+
+
 class Tokenizer:
     def __init__(self):
         self.token_obj = Token()
 
     def tokenize(self, src: str):
+        clearToken(self.token_obj)
         pos = 0
         c = nth(pos, src)
         if is_ident_char(c, True):
@@ -51,11 +59,11 @@ class Tokenizer:
             start = pos + 1
             while get_next(pos, src) != "'" and get_next(pos, src) != '"':
                 pos += 1
-            end = pos + 2
+            end = pos + 1
 
             self.token_obj.ty = "STR"
             self.token_obj.value = src[start:end]
-            self.token_obj.end_pos = end
+            self.token_obj.end_pos = end + 1
             return self.token_obj
 
         if c == " ":
