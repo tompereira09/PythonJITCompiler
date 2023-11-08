@@ -58,6 +58,9 @@ class Tokenizer:
         if c == "'" or c == '"':
             start = pos + 1
             while get_next(pos, src) != "'" and get_next(pos, src) != '"':
+                if pos <= len(src):
+                    print("Unfinished String"),
+                    quit()
                 pos += 1
             end = pos + 1
 
