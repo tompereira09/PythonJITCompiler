@@ -55,6 +55,16 @@ class Tokenizer:
             self.token_obj.end_pos = end
             return self.token_obj
 
+        if c.isnumeric():
+            start = pos
+            while get_next(pos, src).isnumeric():
+                pos += 1
+            end = pos + 1
+            self.token_obj.ty = "NUMBER"
+            self.token_obj.value = src[start:end]
+            self.token_obj.end_pos = end
+            return self.token_obj
+
         if c == "'" or c == '"':
             start = pos + 1
             while get_next(pos, src) != "'" and get_next(pos, src) != '"':
@@ -89,7 +99,6 @@ class Tokenizer:
             self.token_obj.end_pos = pos + 1
             return self.token_obj
 
-
         if c == "+":
             if get_next(pos, src) == "=":
                 self.token_obj.ty = "PLUS_EQ"
@@ -99,7 +108,6 @@ class Tokenizer:
             self.token_obj.end_pos = pos + 1
             return self.token_obj
 
-
         if c == "-":
             if get_next(pos, src) == "=":
                 self.token_obj.ty = "MINUS_EQ"
@@ -108,7 +116,6 @@ class Tokenizer:
             self.token_obj.ty = "MINUS"
             self.token_obj.end_pos = pos + 1
             return self.token_obj
-
 
         if c == "/":
             if get_next(pos, src) == "=":
@@ -128,32 +135,29 @@ class Tokenizer:
             self.token_obj.end_pos = pos + 1
             return self.token_obj
 
-
         if c == "=":
             if get_next(pos, src) == "=":
                 self.token_obj.ty = "DOUBLE_EQ"
                 self.token_obj.end_pos = pos + 2
                 return self.token_obj
-            self.token_obj.ty = "EQ"  
-            self.token_obj.end_pos = pos + 1    
+            self.token_obj.ty = "EQ"
+            self.token_obj.end_pos = pos + 1
             return self.token_obj
-
 
         if c == ">":
             if get_next(pos, src) == "=":
                 self.token_obj.ty = "GREATER_EQ"
                 self.token_obj.end_pos = pos + 2
                 return self.token_obj
-            
+
             if get_next(pos, src) == ">":
                 self.token_obj.ty = "DOUBLE_GREATER"
                 self.token_obj.end_pos = pos + 2
                 return self.token_obj
 
             self.token_obj.ty = "GREATER"
-            self.token_obj.end_pos = pos + 1    
+            self.token_obj.end_pos = pos + 1
             return self.token_obj
-
 
         if c == "<":
             if get_next(pos, src) == "=":
@@ -167,14 +171,5 @@ class Tokenizer:
                 return self.token_obj
 
             self.token_obj.ty = "SMALLER"
-            self.token_obj.end_pos = pos + 1    
+            self.token_obj.end_pos = pos + 1
             return self.token_obj
-
-
-tokenizer = Tokenizer()
-input_string = "print('hello')+= + - -= / /= * *= < <= > >= << >>"
-obj = tokenizer.tokenize(input_string)
-while obj.ty != "EOF":
-    input_string = input_string[obj.end_pos:]
-    print(obj.ty, obj.value)
-    obj = tokenizer.tokenize(input_string)
