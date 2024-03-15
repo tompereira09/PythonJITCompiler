@@ -1,5 +1,5 @@
 import lexer
-import parser
+import ast
 import compiler
 import os
 
@@ -22,11 +22,10 @@ for i in conts:
 
 
 
-    par = parser.Parser()
+    par = ast.Parser()
     pobj = par.parse(tokens)
-    print(pobj.left, pobj.op, pobj.right)
+    #print(pobj.left, pobj.op, pobj.right)
     nodes.append(pobj)
 
 cmp = compiler.Compiler()
 cmp.compile(nodes)
-os.system("nasm main.asm")
