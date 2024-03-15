@@ -1,5 +1,5 @@
 import lexer
-import ast
+import astgen as ast
 import compiler
 import os
 
