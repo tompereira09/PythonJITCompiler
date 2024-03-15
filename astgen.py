@@ -1,10 +1,12 @@
 import lexer
 
 class ParseToken:
-    def __init__(self, rawval, ty, left, right):
+    def __init__(self, rawval, ty):
         self.rawval = rawval
         self.type = ty
         self.len = 0
+        self.left = None
+        self.right = None
 
 class ExprToken:
     def __init__(self, ty, left, right):
@@ -24,10 +26,10 @@ class Parser:
         currtoken_ptr = 0
         if self.tokens[currtoken_ptr].token_ty == "NUMBER":
             if self.tokens[currtoken_ptr + 1].token_ty in self.ops:
-                self.currexpr.left = self.tokens[currtoken_ptr].val
+                self.currexpr.left = ParseToken(self.tokens[currtoken_ptr].val, "NUM")
                 self.currexpr.op = self.tokens[currtoken_ptr + 1].token_ty
                 if self.tokens[currtoken_ptr + 2].token_ty == "NUMBER":
-                    self.currexpr.right = self.tokens[currtoken_ptr + 2].val
+                    self.currexpr.right = ParseToken(self.tokens[currtoken_ptr + 2].val, "NUM")
                     self.currexpr.len = 3
                     return self.currexpr
 

@@ -80,17 +80,17 @@ class Compiler:
         for node in nodes:
             if node.type == "EXPR":
                 if node.op == "PLUS":
-                    res = cfunc_add(float(node.left), float(node.right))
+                    res = cfunc_add(float(node.left.rawval), float(node.right.rawval))
                     print(res)
 
                 elif node.op == "MINUS":
-                    res = cfunc_sub(float(node.left), float(node.right))
+                    res = cfunc_sub(float(node.left.rawval), float(node.right.rawval))
                     print(res)
 
                 elif node.op == "MUL":
-                    res = cfunc_mul(float(node.left), float(node.right))
+                    res = cfunc_mul(float(node.left.rawval), float(node.right.rawval))
                     print(res)
 
                 elif node.op == "DIV":
-                    res = cfunc_div(float(node.left), float(node.right))
+                    res = cfunc_div(float(node.left.rawval), float(node.right.rawval))
                     print(res)
