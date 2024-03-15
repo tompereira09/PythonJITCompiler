@@ -1,69 +1,48 @@
-class Token:
-    def __init__(self, ty, value):
-        self.ty = ty
-        self.value = value
-        self.end_pos = 0
+class LexToken:
+    def __init__(self, ty, val, len):
+        self.token_ty = ty
+        self.val = val
+        self.len = len
 
 
-def nth(n: int, src: str):
-    if n < len(src):
-        return src[n]
-    else:
-        return '\0'
+class Lexer:
+    def __init__(self):
+        self.ops = {"+":"PLUS", "-":"MINUS", "/":"DIV", "*":"MUL"}
 
-
-def get_next(n: int, src: str):
-    return nth(n + 1, src)
-
-
-def is_ident_char(c: str, first: bool):
-    if first:
-        if c.isalpha():
-            return True
+    def isident(self, char, first):
+        if first:
+            if char.isalpha() or char == "_":
+                return True
+            else:
+                return False
         else:
-            return False
-    else:
-        if c.isalpha() or c == "_" or c.isalnum():
-            return True
-        else:
-            return False
+            if char.isalpha() or char.isalnum() or char == "_":
+                return True
+            else:
+                return False
 
+    def tokenize(self, str_tt):
+        for char_ptr in range(len(str_tt)):
+            if str_tt[char_ptr] in self.ops:
+                return LexToken(self.ops[str_tt[char_ptr]], None, 1)
+            
+            elif self.isident(str_tt[char_ptr], True):
+                ptr = 1
+                while ptr <= len(str_tt) - 1 and self.isident(str_tt[ptr], False):
+                    ptr += 1
+    
+                
+                val = str_tt[0:ptr]
+                return LexToken("IDENT", val, ptr)
 
-def clearToken(token: Token):
-    token.ty = None
-    token.value = None
-    token.start_pos = 0
-    token.end_pos = 0
+            elif str_tt[char_ptr].isnumeric():
+                ptr = 1
+                while ptr <= len(str_tt) - 1 and str_tt[ptr].isnumeric():
+                    ptr += 1
+    
+                
+                val = str_tt[0:ptr]
+                return LexToken("NUMBER", val, ptr)
 
-
-class Tokenizer:
-    def tokenize(self, src: str, pos : int):
-        c = nth(pos, src)
-        if c == "+":
-            #print("+")
-            obj = Token("PLUS", None)
-            obj.end_pos = pos + 1
-            return obj
-
-        if c.isnumeric():
-            #print(c)
-            end = pos
-            while c.isnumeric():
-                end += 1
-                c = nth(end, src)
-            obj = Token("INT", src[pos:end])
-            obj.end_pos = end
-            #print(obj.end_pos)
-            return obj
-
-        if c == " ":
-            obj = Token("BLANK", None)
-            obj.end_pos = pos + 1
-            return obj
-
-        if pos <= len(src):
-            obj = Token("EOF", None)
-            obj.end_pos = pos + 1
-            return obj
-
-
+            elif str_tt[char_ptr] == " " or str_tt[char_ptr] == "\n":
+                return LexToken("BLANK", None, 1)
