@@ -73,7 +73,9 @@ cfunc_sub = CFUNCTYPE(c_double, c_double, c_double)(func_ptr_sub)
 cfunc_mul = CFUNCTYPE(c_double, c_double, c_double)(func_ptr_mul)
 cfunc_div = CFUNCTYPE(c_double, c_double, c_double)(func_ptr_div)
 
+print("----------------------BULTINS----------------------")
 print(mod)
+print("----------------------BULTINS----------------------")
 
 class Compiler:
     def compile(self, nodes):

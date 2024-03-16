@@ -25,24 +25,27 @@ class Lexer:
         for char_ptr in range(len(str_tt)):
             if str_tt[char_ptr] in self.ops:
                 return LexToken(self.ops[str_tt[char_ptr]], None, 1)
-            
+
             elif self.isident(str_tt[char_ptr], True):
                 ptr = 1
                 while ptr <= len(str_tt) - 1 and self.isident(str_tt[ptr], False):
                     ptr += 1
-    
-                
+
+
                 val = str_tt[0:ptr]
                 return LexToken("IDENT", val, ptr)
 
             elif str_tt[char_ptr].isnumeric():
                 ptr = 1
-                while ptr <= len(str_tt) - 1 and str_tt[ptr].isnumeric():
+                while ptr <= len(str_tt) - 1 and str_tt[ptr].isnumeric() or str_tt[ptr] == ".":
                     ptr += 1
-    
-                
+
+
                 val = str_tt[0:ptr]
                 return LexToken("NUMBER", val, ptr)
 
             elif str_tt[char_ptr] == " " or str_tt[char_ptr] == "\n":
                 return LexToken("BLANK", None, 1)
+
+            else:
+                raise Exception(f'Token not implemented: \'{str_tt[char_ptr]}\'.')

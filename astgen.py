@@ -32,6 +32,10 @@ class Parser:
                     self.currexpr.right = ParseToken(self.tokens[currtoken_ptr + 2].val, "NUM")
                     self.currexpr.len = 3
                     return self.currexpr
+                elif self.tokens[currtoken_ptr + 2].token_ty == "EXPR":
+                    pass # WIP
+                else:
+                    raise Exception(f'Expected \'INT\' or \'EXPR\', got: \'{self.tokens[currtoken_ptr + 2].token_ty}\'.')
 
 
 
