@@ -47,5 +47,11 @@ class Lexer:
             elif str_tt[char_ptr] == " " or str_tt[char_ptr] == "\n":
                 return LexToken("BLANK", None, 1)
 
+            elif str_tt[char_ptr] == "(" or str_tt[char_ptr] == ")":
+                if str_tt[char_ptr] == "(":
+                    return LexToken("LPAREN", None, 1)
+                else:
+                    return LexToken("RPAREN", None, 1)
+
             else:
                 raise Exception(f'Token not implemented: \'{str_tt[char_ptr]}\'.')

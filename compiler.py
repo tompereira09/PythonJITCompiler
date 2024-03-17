@@ -1,4 +1,4 @@
-from ctypes import CFUNCTYPE, c_double
+from ctypes import CFUNCTYPE, c_double, c_int64
 
 import llvmlite.binding as llvm
 
@@ -38,6 +38,22 @@ bultins = """
      %"res" = fdiv double %".1", %".2"
      ret double %"res"
    }
+
+   define i64 @"fn_fib"(i64 %".1")
+   {
+   fn_fib_entry:
+     %".3" = icmp sle i64 %".1", 1
+     br i1 %".3", label %"fn_fib_entry.if", label %"fn_fib_entry.endif"
+   fn_fib_entry.if:
+     ret i64 1
+   fn_fib_entry.endif:
+     %".6" = sub i64 %".1", 1
+     %".7" = sub i64 %".1", 2
+     %".8" = call i64 @"fn_fib"(i64 %".6")
+     %".9" = call i64 @"fn_fib"(i64 %".7")
+     %".10" = add i64 %".8", %".9"
+     ret i64 %".10"
+   }
    """
 
 def create_execution_engine():
@@ -68,10 +84,12 @@ func_ptr_add = engine.get_function_address("fpadd")
 func_ptr_sub = engine.get_function_address("fpsub")
 func_ptr_mul = engine.get_function_address("fpmul")
 func_ptr_div = engine.get_function_address("fpdiv")
+func_fib_ptr = engine.get_function_address("fn_fib")
 cfunc_add = CFUNCTYPE(c_double, c_double, c_double)(func_ptr_add)
 cfunc_sub = CFUNCTYPE(c_double, c_double, c_double)(func_ptr_sub)
 cfunc_mul = CFUNCTYPE(c_double, c_double, c_double)(func_ptr_mul)
 cfunc_div = CFUNCTYPE(c_double, c_double, c_double)(func_ptr_div)
+c_fn_fib = CFUNCTYPE(c_int64, c_int64)(func_fib_ptr)
 
 print("----------------------BULTINS----------------------")
 print(mod)
@@ -96,3 +114,15 @@ class Compiler:
                 elif node.op == "DIV":
                     res = cfunc_div(float(node.left.rawval), float(node.right.rawval))
                     print(res)
+            elif node.type == "FN":
+                if node.builtin:
+                    if node.name == "FIB":
+                        times = int(node.args[0].val)
+                        if times <= 100:
+                          print("Fibonnaci:")
+                          for n in range(0,times+1):
+                            result = c_fn_fib(n)
+                            print(result)
+                          print("----------")
+                        else:
+                            raise Exception(f'Calculating {times} terms of the Fibonnaci Sequence may crash your device.')

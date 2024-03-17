@@ -14,6 +14,14 @@ class ExprToken:
         self.len = 0
         self.op = None
 
+class FnToken:
+    def __init__(self, args):
+        self.type = "FN"
+        self.builtin = False
+        self.name = ""
+        self.args = args
+        self.len = 0
+
 class Parser:
     def __init__(self):
         self.tokens = None
@@ -35,10 +43,28 @@ class Parser:
                 elif self.tokens[currtoken_ptr + 2].token_ty == "EXPR":
                     pass # WIP
                 else:
-                    raise Exception(f'Expected \'NUM\' or \'EXPR\', got: \'{self.tokens[currtoken_ptr + 2].token_ty}\'.')
+                    raise Exception(f'Expected \'NUMBER\' or \'EXPR\', got: \'{self.tokens[currtoken_ptr + 2].token_ty}\'.')
         elif self.tokens[currtoken_ptr].token_ty == "IDENT":
-            if self.tokens[currtoken_ptr + 1].token_ty in self.ops:
-                raise Exception(f'Expected \'NUM\' or \'EXPR\', got: \'{self.tokens[currtoken_ptr].token_ty}\'.')
+            if self.tokens[currtoken_ptr].val == "fib":
+                if self.tokens[currtoken_ptr + 1].token_ty == "LPAREN":
+                    if self.tokens[currtoken_ptr + 2].token_ty == "NUMBER":
+                        if self.tokens[currtoken_ptr + 3].token_ty == "RPAREN":
+                            tk = FnToken([self.tokens[currtoken_ptr + 2]])
+                            tk.len = 4
+                            tk.builtin = True
+                            tk.name = "FIB"
+
+                            return tk
+                        else:
+                            raise Exception(f'Expected \'RPAREN\', got: \'{self.tokens[currtoken_ptr + 3].token_ty}\'.')
+                    else:
+                        raise Exception(f'Expected \'NUMBER\', got: \'{self.tokens[currtoken_ptr + 2].token_ty}\'.')
+                else:
+                    raise Exception(f'Expected \'LPAREN\', got: \'{self.tokens[currtoken_ptr + 1].token_ty}\'.')
+            else:
+                raise Exception(f'Ident not implemented \'{self.tokens[currtoken_ptr].val}\'.')
+
+
 
 
 
