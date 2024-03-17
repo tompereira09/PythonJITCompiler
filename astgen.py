@@ -35,7 +35,10 @@ class Parser:
                 elif self.tokens[currtoken_ptr + 2].token_ty == "EXPR":
                     pass # WIP
                 else:
-                    raise Exception(f'Expected \'INT\' or \'EXPR\', got: \'{self.tokens[currtoken_ptr + 2].token_ty}\'.')
+                    raise Exception(f'Expected \'NUM\' or \'EXPR\', got: \'{self.tokens[currtoken_ptr + 2].token_ty}\'.')
+        elif self.tokens[currtoken_ptr].token_ty == "IDENT":
+            if self.tokens[currtoken_ptr + 1].token_ty in self.ops:
+                raise Exception(f'Expected \'NUM\' or \'EXPR\', got: \'{self.tokens[currtoken_ptr].token_ty}\'.')
 
 
 
