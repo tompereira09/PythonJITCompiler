@@ -8,11 +8,17 @@ class ParseToken:
         self.left = None
         self.right = None
 
+    def __repr__(self):
+        return self.type, self.rawval
+
 class ExprToken:
     def __init__(self, ty, left, right):
         self.type = ty
         self.len = 0
         self.op = None
+
+    def __repr__(self):
+        return f'Type: {self.type}, {self.left.rawval} {self.op}, {self.right.rawval}'
 
 class FnToken:
     def __init__(self, args):
@@ -21,6 +27,9 @@ class FnToken:
         self.name = ""
         self.args = args
         self.len = 0
+
+    def __repr__(self):
+        return f'Type: {self.type}, Name: {self.name}, Args: {self.args[0].val}, Builtin: {self.builtin}'
 
 class Parser:
     def __init__(self):

@@ -1,6 +1,6 @@
 import lexer
 import astgen as ast
-import compiler
+#import compiler
 import os
 
 file = open(input("filename > "), "r")
@@ -27,5 +27,8 @@ for i in conts:
     #print(pobj.left, pobj.op, pobj.right)
     nodes.append(pobj)
 
-cmp = compiler.Compiler()
-cmp.compile(nodes)
+for i in nodes:
+    print(i)
+
+#cmp = compiler.Compiler()
+#cmp.compile(nodes)
